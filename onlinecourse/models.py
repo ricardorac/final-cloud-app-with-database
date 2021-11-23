@@ -137,13 +137,17 @@ class Submission(models.Model):
     enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
     choices = models.ManyToManyField(Choice)
 
+    def get_selected_ids(self):
+        selected_ids = []
+        for choice in self.choices.all():
+            selected_ids.append(choice.id)
+        return selected_ids
+
 #    Other fields and methods you would like to design
     def get_score(self):
         score = 0
-        questions = enrollment.course.question_set.all()
-        selected_ids = []
-        for choice in self.choice_set.all():
-            selected_ids.append(choice.id)
+        questions = self.enrollment.course.question_set.all()
+        selected_ids = self.get_selected_ids()
         for question in questions:
             if question.is_get_score(selected_ids):
                 score += question.grade

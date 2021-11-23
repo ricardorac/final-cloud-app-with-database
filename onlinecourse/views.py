@@ -140,9 +140,12 @@ def extract_answers(request):
         # For each selected choice, check if it is a correct answer or not
         # Calculate the total score
 def show_exam_result(request, course_id, submission_id):
+    context = {}
     user = request.user
     course = get_object_or_404(Course, pk=course_id)
     submission = get_object_or_404(Submission, pk=submission_id)
-
+    
+    context['submission'] = submission
+    return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
 
 

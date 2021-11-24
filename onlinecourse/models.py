@@ -146,10 +146,12 @@ class Submission(models.Model):
 #    Other fields and methods you would like to design
     def get_score(self):
         score = 0
+        max_score = 0
         questions = self.enrollment.course.question_set.all()
         selected_ids = self.get_selected_ids()
         for question in questions:
+            max_score += question.grade
             if question.is_get_score(selected_ids):
                 score += question.grade
         
-        return score
+        return score * 100 / max_score
